@@ -1,0 +1,77 @@
+---
+import ScrambleLetter from "./ScrambleLetter.astro";
+
+interface Props {
+  text: string;
+  class?: string;
+  letterClass?: string;
+  steps?: number;
+  interval?: number;
+  letterInterval?: number;
+  initialText?: string;
+}
+
+const props = Astro.props;
+const {
+  text,
+  class: className = "",
+  letterClass = "",
+  steps = 3,
+  interval = 30,
+  letterInterval = 10,
+  initialText = "",
+} = props;
+
+const chars = text.split("");
+---
+
+<span
+  class:list={["scramble-text", className]}
+  data-text={text}
+  data-steps={steps}
+  data-interval={interval}
+  data-initial-text={initialText}
+  data-letter-interval={letterInterval}
+>
+  {
+    chars.map((char, index) => (
+      <ScrambleLetter
+        char={char}
+        class={letterClass}
+        isSpace={char === " "}
+        index={index}
+      />
+    ))
+  }
+</span>
+
+<script>
+  import { scrambleText } from "@/utils/textScramble";
+
+  function init() {
+    const elements = document.querySelectorAll(".scramble-text");
+
+    elements.forEach((element) => {
+      const targetText = element.getAttribute("data-text") || "";
+      const steps = parseInt(element.getAttribute("data-steps") || "5");
+      const interval = parseInt(element.getAttribute("data-interval") || "150");
+      const letterInterval = parseInt(
+        element.getAttribute("data-letter-interval") || "50"
+      );
+      const initialText = element.getAttribute("data-initial-text") || "";
+
+      const animation = scrambleText(element, targetText, {
+        steps,
+        interval,
+        letterInterval,
+        initialText,
+      });
+
+      // Store the animation stop function on the element for cleanup
+      (element as any).stopAnimation = animation.stop;
+    });
+  }
+
+  document.removeEventListener("DOMContentLoaded", init);
+  document.addEventListener("DOMContentLoaded", init);
+</script>

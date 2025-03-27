@@ -7,7 +7,7 @@
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["src/*"],
-			"site": ["site.config.ts"]
+			"site": ["site.config.ts"],
 		},
 		"types": ["astro/client", "vite-plugin-pwa/vanillajs", "vite-plugin-pwa/info", "vite-plugin-pwa/pwa-assets"]
 	},

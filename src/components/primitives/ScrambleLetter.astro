@@ -1,0 +1,88 @@
+---
+interface Props {
+  char: string;
+  class?: string;
+  isSpace?: boolean;
+  index?: number;
+}
+
+const {
+  char,
+  class: className = '',
+  isSpace = false,
+  index = 0
+} = Astro.props;
+
+// Generate a random character for initial display
+const randomChar = !isSpace ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'[
+  Math.floor(Math.random() * 52)
+] : ' ';
+---
+
+<span 
+  class:list={[
+    "scramble-letter",
+    { "scramble-space": isSpace },
+    className
+  ]} 
+  data-char={char}
+  data-index={index}>
+  {randomChar}
+</span>
+
+<style>
+  .scramble-letter {
+    display: inline-block;
+    width: 0.65em;
+    text-align: center;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                opacity 0.2s ease-in-out;
+  }
+
+  .scramble-letter:not(.scramble-space) {
+    transform-origin: center;
+    backface-visibility: hidden;
+    will-change: transform, opacity;
+  }
+
+  .scramble-letter.changing {
+    opacity: 0.7;
+    transform: scale(1.2) rotate(var(--rotation));
+  }
+
+  .scramble-space {
+    width: 0.35em;
+  }
+</style>
+
+<script>
+  // Add a small random rotation and scale effect when letters change
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'characterData') {
+        const target = mutation.target.parentElement as HTMLElement;
+        if (!target?.classList.contains('scramble-letter') || target.classList.contains('scramble-space')) return;
+        
+        // Add a slight random rotation
+        const rotation = (Math.random() - 0.5) * 45; // -22.5 to 22.5 degrees
+        target.style.setProperty('--rotation', `${rotation}deg`);
+        target.classList.add('changing');
+        
+        // Reset after transition
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            target.classList.remove('changing');
+          });
+        });
+      }
+    });
+  });
+
+  // Observe all scramble letters
+  document.querySelectorAll('.scramble-letter:not(.scramble-space)').forEach(letter => {
+    observer.observe(letter, { 
+      characterData: true,
+      subtree: true
+    });
+  });
+</script> 

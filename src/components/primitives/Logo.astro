@@ -1,0 +1,118 @@
+---
+interface Props {
+  /**
+   * The variant of the logo to display
+   * @default 'default'
+   */
+  variant?: "default" | "circle" | "wordmark";
+
+  /**
+   * The theme of the logo
+   * @default 'light'
+   */
+  theme?: "light" | "dark";
+
+  /**
+   * Whether to use SVG or PNG format
+   * @default 'svg'
+   */
+  format?: "svg" | "png";
+
+  /**
+   * Whether to use high resolution (2x) version when using PNG
+   * @default false
+   */
+  highRes?: boolean;
+
+  /**
+   * Additional CSS classes
+   */
+  class?: string;
+
+  /**
+   * Background color for circle variant (optional)
+   */
+  backgroundColor?: string;
+
+  /**
+   * Size in pixels (width)
+   * @default 200
+   */
+  size?: number;
+}
+
+const {
+  variant = "default",
+  theme = "light",
+  format = "svg",
+  highRes = false,
+  class: className = "",
+  backgroundColor,
+  size = 200,
+} = Astro.props;
+
+// Construct the image path based on props
+const getImagePath = () => {
+  const prefix =
+    variant === "default"
+      ? "logo"
+      : variant === "circle"
+        ? "circle-logo"
+        : "wordmark";
+  const themeSuffix = theme === "dark" ? "-dark" : "";
+  const resSuffix = format === "png" && highRes ? "@2x" : "";
+  return `/logos/${prefix}${themeSuffix}${resSuffix}.${format}`;
+};
+
+const imagePath = getImagePath();
+---
+
+<div class:list={["logo-wrapper", className]} style={`width: ${size}px;`}>
+  {
+    format === "svg" ? (
+      <img
+        src={imagePath}
+        alt="Every Language Logo"
+        width={size}
+        height={size}
+        style={
+          backgroundColor && variant === "circle"
+            ? `background-color: ${backgroundColor};`
+            : ""
+        }
+      />
+    ) : (
+      <picture>
+        {highRes && (
+          <source
+            srcset={`/logos/${variant === "default" ? "logo" : variant === "circle" ? "circle-logo" : "wordmark"}${theme === "dark" ? "-dark" : ""}@2x.png`}
+            media="(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)"
+          />
+        )}
+        <img
+          src={imagePath}
+          alt="Every Language Logo"
+          width={size}
+          height={size}
+          style={
+            backgroundColor && variant === "circle"
+              ? `background-color: ${backgroundColor};`
+              : ""
+          }
+        />
+      </picture>
+    )
+  }
+</div>
+
+<style>
+  .logo-wrapper {
+    display: inline-block;
+  }
+
+  .logo-wrapper img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>

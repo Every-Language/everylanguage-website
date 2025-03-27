@@ -100,6 +100,10 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
   .active-locale {
     font-weight: bolder;
   }
+  .mask-rect {
+    x: 0;
+    fill: white;
+  }
 </style>
 
 <style is:global>
@@ -147,8 +151,12 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
                 mix-blend-mode: screen;
               }
             </style>
+            <clipPath id="logo-mask">
+              <rect x="0" y="0" width="115.42" height="49.28" class="mask-rect"
+              ></rect>
+            </clipPath>
           </defs>
-          <g class="cls-2 logo-path-mask">
+          <g class="cls-2" clip-path="url(#logo-mask)">
             <g id="Layer_2" data-name="Layer 2">
               <g id="Layer_1-2" data-name="Layer 1">
                 <g class="cls-3">
@@ -269,11 +277,14 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
 
   lm.onElementLoaded("navigation", (ctx) => {
     ctx?.add(() => {
+      // Set initial state - logo fully visible
+      gsap.set(".mask-rect", { width: 0 });
+
       gsap
         .timeline({
           defaults: {
             ease: "power1.inOut",
-            duration: 0.3,
+            duration: 0.5,
           },
           scrollTrigger: {
             trigger: "body",
@@ -282,7 +293,7 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
           },
         })
         .to("[data-company-name]", { opacity: 0 })
-        .to(".logo-path-mask", { opacity: 0 }, "<")
+        .to(".mask-rect", { width: "100%" }, "<")
         .set("#header-logo", { pointerEvents: "none" });
 
       const tl = gsap.timeline({

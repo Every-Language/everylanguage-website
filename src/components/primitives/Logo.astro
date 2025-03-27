@@ -59,7 +59,7 @@ const getImagePath = () => {
       : variant === "circle"
         ? "circle-logo"
         : "wordmark";
-  const themeSuffix = theme === "dark" ? "-dark" : "";
+  const themeSuffix = theme === "light" ? "-dark" : "";
   const resSuffix = format === "png" && highRes ? "@2x" : "";
   return `/logos/${prefix}${themeSuffix}${resSuffix}.${format}`;
 };

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useIntersectionObserver } from "@uidotdev/usehooks";
 import { scrambleText } from "@/utils/textScramble";
 
 interface ScrambleTextReactProps {
@@ -22,55 +23,60 @@ export default function ScrambleTextReact({
 }: ScrambleTextReactProps) {
   const [isScrambled, setIsScrambled] = useState(true);
   const animationRef = useRef<{ stop: () => void } | null>(null);
-  const elementRef = useRef<HTMLSpanElement>(null);
+  const elementRef = useRef<HTMLSpanElement | null>(null);
+
+  const [ref, entry] = useIntersectionObserver({
+    threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+    rootMargin: "0px",
+  });
 
   useEffect(() => {
     const element = elementRef.current;
     if (!element) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const visibilityRatio = entry.intersectionRatio;
+    const visibilityRatio = entry?.intersectionRatio ?? 0;
 
-          if (visibilityRatio > 0.5 && isScrambled) {
-            // Element is more than 50% visible, stop scrambling
-            if (animationRef.current) {
-              animationRef.current.stop();
-              animationRef.current = null;
-            }
-            setIsScrambled(false);
-          } else if (visibilityRatio < 0.1 && !isScrambled) {
-            // Element is less than 10% visible, start scrambling
-            animationRef.current = scrambleText(element, text, {
-              steps,
-              interval,
-              letterInterval,
-              initialText,
-            });
-            setIsScrambled(true);
-          }
-        });
-      },
-      {
-        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
-        rootMargin: "0px",
+    if (visibilityRatio > 0.5 && isScrambled) {
+      // Element is more than 50% visible, stop scrambling
+      if (animationRef.current) {
+        animationRef.current.stop();
+        animationRef.current = null;
       }
-    );
-
-    observer.observe(element);
+      setIsScrambled(false);
+    } else if (visibilityRatio < 0.1 && !isScrambled) {
+      // Element is less than 10% visible, start scrambling
+      animationRef.current = scrambleText(element, text, {
+        steps,
+        interval,
+        letterInterval,
+        initialText,
+      });
+      setIsScrambled(true);
+    }
 
     return () => {
-      observer.disconnect();
       if (animationRef.current) {
         animationRef.current.stop();
       }
     };
-  }, [text, steps, interval, letterInterval, initialText, isScrambled]);
+  }, [
+    entry?.intersectionRatio,
+    text,
+    steps,
+    interval,
+    letterInterval,
+    initialText,
+    isScrambled,
+  ]);
+
+  const setRefs = (el: HTMLSpanElement | null) => {
+    elementRef.current = el;
+    ref(el);
+  };
 
   return (
     <span
-      ref={elementRef}
+      ref={setRefs}
       className={`scramble-text ${className}`}
       data-text={text}
       data-steps={steps}

@@ -30,6 +30,7 @@
     "@keystatic/astro": "^5.0.0",
     "@keystatic/core": "^0.5.17",
     "@svgdotjs/svg.js": "^3.2.4",
+    "@uidotdev/usehooks": "^2.4.1",
     "alpinejs": "^3.14.0",
     "astro": "4.7.0",
     "gsap": "^3.12.5",
@@ -39,8 +40,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "splitting": "^1.0.6",
-    "vivus": "^0.4.6",
-    "svg.js": "^2.7.1"
+    "svg.js": "^2.7.1",
+    "vivus": "^0.4.6"
   },
   "devDependencies": {
     "@biomejs/biome": "1.7.3",

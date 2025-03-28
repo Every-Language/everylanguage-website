@@ -1,5 +1,5 @@
 ---
-import ScrambleLetter from "./ScrambleLetter.astro";
+import ScrambleTextReact from "../ScrambleTextReact";
 
 interface Props {
   text: string;
@@ -25,25 +25,16 @@ const {
 const chars = text.split("");
 ---
 
-<span
-  class:list={["scramble-text", className]}
-  data-text={text}
-  data-steps={steps}
-  data-interval={interval}
-  data-initial-text={initialText}
-  data-letter-interval={letterInterval}
->
-  {
-    chars.map((char, index) => (
-      <ScrambleLetter
-        char={char}
-        class={letterClass}
-        isSpace={char === " "}
-        index={index}
-      />
-    ))
-  }
-</span>
+<ScrambleTextReact
+  client:load
+  text={text}
+  className={className}
+  letterClass={letterClass}
+  steps={steps}
+  interval={interval}
+  letterInterval={letterInterval}
+  initialText={initialText}
+/>
 
 <script>
   import { scrambleText } from "@/utils/textScramble";
@@ -60,18 +51,68 @@ const chars = text.split("");
       );
       const initialText = element.getAttribute("data-initial-text") || "";
 
-      const animation = scrambleText(element, targetText, {
-        steps,
-        interval,
-        letterInterval,
-        initialText,
-      });
+      let currentAnimation: { stop: () => void } | null = null;
+      let isScrambled = false;
 
-      // Store the animation stop function on the element for cleanup
-      (element as any).stopAnimation = animation.stop;
+      // Function to start scrambling
+      const startScramble = () => {
+        if (!isScrambled) {
+          currentAnimation = scrambleText(element, targetText, {
+            steps,
+            interval,
+            letterInterval,
+            initialText,
+          });
+          isScrambled = true;
+        }
+      };
+
+      // Function to stop scrambling
+      const stopScramble = () => {
+        if (currentAnimation) {
+          currentAnimation.stop();
+          currentAnimation = null;
+          isScrambled = false;
+        }
+      };
+
+      // Create a more precise intersection observer
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            // Calculate how much of the element is visible
+            const visibilityRatio = entry.intersectionRatio;
+
+            if (visibilityRatio > 0.5) {
+              // Element is more than 50% visible
+              stopScramble();
+            } else if (visibilityRatio < 0.1) {
+              // Element is less than 10% visible
+              startScramble();
+            }
+          });
+        },
+        {
+          threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], // More granular thresholds
+          rootMargin: "0px", // No margin for more precise tracking
+        }
+      );
+
+      // Start observing the element
+      observer.observe(element);
+
+      // Store cleanup functions
+      (element as any).stopAnimation = () => {
+        stopScramble();
+        observer.disconnect();
+      };
     });
   }
 
-  document.removeEventListener("DOMContentLoaded", init);
-  document.addEventListener("DOMContentLoaded", init);
+  // Initialize on DOM content loaded
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
 </script>

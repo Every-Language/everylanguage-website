@@ -21,15 +21,15 @@ const translatePath = useTranslatedPath(lang);
     class="from-everylanguage-black-soft to-everylanguage-black absolute inset-0 bg-gradient-to-b"
   >
   </div>
-  <div class="container relative z-10 mx-auto px-4 py-20">
+  <div class="container relative z-10 mx-auto px-4">
     <div class="flex flex-col items-center justify-center gap-8 md:gap-16">
       <div class="m-auto flex w-full justify-center">
         <h1 class="sr-only">Every Language</h1>
         <!-- Desktop version -->
-        <div class="hidden md:block">
+        <div class="hidden lg:block">
           <ScrambleText
             text="EVERY LANGUAGE"
-            class="text-everylanguage-white whitespace-nowrap text-8xl tracking-tight"
+            class="text-everylanguage-white whitespace-nowrap text-7xl tracking-tight"
             letterClass="font-display"
             steps={3}
             interval={100}
@@ -38,10 +38,10 @@ const translatePath = useTranslatedPath(lang);
           />
         </div>
         <!-- Mobile version -->
-        <div class="flex flex-col items-center gap-2 md:hidden">
+        <div class="flex flex-col items-center gap-2 lg:hidden">
           <ScrambleText
             text="EVERY"
-            class="text-everylanguage-white whitespace-nowrap text-5xl tracking-tight"
+            class="text-everylanguage-white whitespace-nowrap text-7xl tracking-tight"
             letterClass="font-display"
             steps={3}
             interval={100}
@@ -50,7 +50,7 @@ const translatePath = useTranslatedPath(lang);
           />
           <ScrambleText
             text="LANGUAGE"
-            class="text-everylanguage-white whitespace-nowrap text-5xl tracking-tight"
+            class="text-everylanguage-white whitespace-nowrap text-7xl tracking-tight"
             letterClass="font-display"
             steps={3}
             interval={100}

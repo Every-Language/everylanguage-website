@@ -10,98 +10,97 @@ interface ScrambleTextReactProps {
   interval?: number;
   letterInterval?: number;
   initialText?: string;
+  monospace?: boolean;
 }
 
 export default function ScrambleTextReact({
   text,
   className = "",
   letterClass = "",
-  steps = 3,
-  interval = 30,
-  letterInterval = 10,
+  steps = 5,
+  interval = 150,
+  letterInterval = 50,
   initialText = "",
+  monospace = false,
 }: ScrambleTextReactProps) {
-  const [isScrambled, setIsScrambled] = useState(true);
-  const animationRef = useRef<{ stop: () => void } | null>(null);
-  const elementRef = useRef<HTMLSpanElement | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [scrambleAnimation, setScrambleAnimation] = useState<{
+    stop: () => void;
+  } | null>(null);
+  const elementRef = useRef<HTMLDivElement>(null);
 
-  const [ref, entry] = useIntersectionObserver({
-    threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
-    rootMargin: "0px",
+  // Set up intersection observer
+  const [refCallback, entry] = useIntersectionObserver({
+    threshold: 0.1,
   });
 
+  // Update our ref with the intersection observer callback
   useEffect(() => {
-    const element = elementRef.current;
-    if (!element) return;
+    if (elementRef.current) {
+      refCallback(elementRef.current);
+    }
+  }, [refCallback]);
 
-    const visibilityRatio = entry?.intersectionRatio ?? 0;
+  // Handle visibility changes
+  useEffect(() => {
+    setIsVisible(!!entry?.isIntersecting);
+  }, [entry?.isIntersecting]);
 
-    if (visibilityRatio > 0.5 && isScrambled) {
-      // Element is more than 50% visible, stop scrambling
-      if (animationRef.current) {
-        animationRef.current.stop();
-        animationRef.current = null;
-      }
-      setIsScrambled(false);
-    } else if (visibilityRatio < 0.1 && !isScrambled) {
-      // Element is less than 10% visible, start scrambling
-      animationRef.current = scrambleText(element, text, {
-        steps,
-        interval,
-        letterInterval,
-        initialText,
-      });
-      setIsScrambled(true);
+  // Handle scramble animation
+  useEffect(() => {
+    if (!elementRef.current) return;
+
+    // Stop any existing animation
+    if (scrambleAnimation) {
+      scrambleAnimation.stop();
     }
 
+    // Start new animation if not visible
+    if (!isVisible) {
+      // Ensure the DOM has been updated with the letter elements
+      requestAnimationFrame(() => {
+        const animation = scrambleText(elementRef.current!, text, {
+          steps,
+          interval,
+          letterInterval,
+          initialText,
+        });
+        setScrambleAnimation(animation);
+      });
+    }
+
+    // Cleanup animation when component unmounts
     return () => {
-      if (animationRef.current) {
-        animationRef.current.stop();
+      if (scrambleAnimation) {
+        scrambleAnimation.stop();
       }
     };
-  }, [
-    entry?.intersectionRatio,
-    text,
-    steps,
-    interval,
-    letterInterval,
-    initialText,
-    isScrambled,
-  ]);
+  }, [isVisible, text, steps, interval, letterInterval, initialText]);
 
-  const setRefs = (el: HTMLSpanElement | null) => {
-    elementRef.current = el;
-    ref(el);
-  };
-
-  return (
-    <span
-      ref={setRefs}
-      className={`scramble-text ${className}`}
-      data-text={text}
-      data-steps={steps}
-      data-interval={interval}
-      data-initial-text={initialText}
-      data-letter-interval={letterInterval}
-    >
-      {text.split("").map((char, index) => (
+  const renderText = () => {
+    if (monospace) {
+      return text.split("").map((char, index) => (
         <span
           key={index}
           className={`scramble-letter ${letterClass} ${
             char === " " ? "scramble-space" : ""
           }`}
-          data-char={char}
-          data-index={index}
+          style={{
+            display: "inline-block",
+            width: "1ch",
+            marginRight: monospace ? "0.5ch" : "0",
+          }}
         >
-          {!isScrambled
-            ? char
-            : char === " "
-            ? " "
-            : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[
-                Math.floor(Math.random() * 52)
-              ]}
+          {char}
         </span>
-      ))}
-    </span>
+      ));
+    }
+    return text;
+  };
+
+  return (
+    <div ref={elementRef} className={className} data-scramble-text>
+      {renderText()}
+    </div>
   );
 }

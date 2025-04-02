@@ -36,7 +36,7 @@
     "gsap": "^3.12.5",
     "keystatic-components": "^0.0.2",
     "locomotive-scroll": "^4.1.4",
-    "motion": "^10.16.4",
+    "motion": "^12.6.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "splitting": "^1.0.6",

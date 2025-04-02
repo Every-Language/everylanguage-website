@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useIntersectionObserver } from "@uidotdev/usehooks";
-import { scrambleText } from "@/utils/textScramble";
+import { motion, AnimatePresence } from "motion/react";
 
 interface ScrambleTextReactProps {
   text: string;
@@ -13,8 +13,12 @@ interface ScrambleTextReactProps {
   monospace?: boolean;
 }
 
+const CHARS = "!@#$%^&*():{};|,.<>/?";
+const CYCLES_PER_LETTER = 2;
+const SHUFFLE_TIME = 50;
+
 export default function ScrambleTextReact({
-  text,
+  text: TARGET_TEXT,
   className = "",
   letterClass = "",
   steps = 5,
@@ -24,9 +28,8 @@ export default function ScrambleTextReact({
   monospace = false,
 }: ScrambleTextReactProps) {
   const [isVisible, setIsVisible] = useState(false);
-  const [scrambleAnimation, setScrambleAnimation] = useState<{
-    stop: () => void;
-  } | null>(null);
+  //   const [scrambledText, setScrambledText] = useState(text);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const elementRef = useRef<HTMLDivElement>(null);
 
   // Set up intersection observer
@@ -46,41 +49,99 @@ export default function ScrambleTextReact({
     setIsVisible(!!entry?.isIntersecting);
   }, [entry?.isIntersecting]);
 
+  const [text, setText] = useState(TARGET_TEXT);
+
+  const scramble = () => {
+    console.log("scramble called");
+    let pos = 0;
+
+    intervalRef.current = setInterval(() => {
+      const scrambled = TARGET_TEXT.split("")
+        .map((char, index) => {
+          if (pos / CYCLES_PER_LETTER > index) {
+            return char;
+          }
+
+          const randomCharIndex = Math.floor(Math.random() * CHARS.length);
+          const randomChar = CHARS[randomCharIndex];
+
+          return randomChar;
+        })
+        .join("");
+
+      //   console.log({ scrambled });
+
+      setText(scrambled);
+      pos++;
+
+      if (pos >= TARGET_TEXT.length * CYCLES_PER_LETTER) {
+        stopScramble();
+      }
+    }, SHUFFLE_TIME);
+  };
+
+  const stopScramble = () => {
+    clearInterval(intervalRef.current || undefined);
+
+    setText(TARGET_TEXT);
+  };
+
+  //   const scramble = () => {
+  //     let pos = 0;
+
+  //     intervalRef.current = setInterval(() => {
+  //       const scrambled = text
+  //         .split("")
+  //         .map((char, index) => {
+  //           if (pos / CYCLES_PER_LETTER > index) {
+  //             return char;
+  //           }
+
+  //           const randomCharIndex = Math.floor(Math.random() * CHARS.length);
+  //           const randomChar = CHARS[randomCharIndex];
+
+  //           return randomChar;
+  //         })
+  //         .join("");
+
+  //       setScrambledText(scrambled);
+  //       pos++;
+
+  //       if (pos >= text.length * CYCLES_PER_LETTER) {
+  //         stopScramble();
+  //       }
+  //     }, SHUFFLE_TIME);
+  //   };
+
+  //   const stopScramble = () => {
+  //     if (intervalRef.current) {
+  //       clearInterval(intervalRef.current);
+  //       intervalRef.current = null;
+  //     }
+  //     setScrambledText(text);
+  //   };
+
   // Handle scramble animation
   useEffect(() => {
-    if (!elementRef.current) return;
-
-    // Stop any existing animation
-    if (scrambleAnimation) {
-      scrambleAnimation.stop();
-    }
-
-    // Start new animation if not visible
     if (!isVisible) {
-      // Ensure the DOM has been updated with the letter elements
-      requestAnimationFrame(() => {
-        const animation = scrambleText(elementRef.current!, text, {
-          steps,
-          interval,
-          letterInterval,
-          initialText,
-        });
-        setScrambleAnimation(animation);
-      });
+      scramble();
+    } else {
+      stopScramble();
     }
-
-    // Cleanup animation when component unmounts
+    // console.log({ isVisible, text });
     return () => {
-      if (scrambleAnimation) {
-        scrambleAnimation.stop();
-      }
+      stopScramble();
     };
-  }, [isVisible, text, steps, interval, letterInterval, initialText]);
+  }, [isVisible, text]);
+
+  useEffect(() => {
+    scramble();
+  }, []);
 
   const renderText = () => {
     if (monospace) {
       return text.split("").map((char, index) => (
-        <span
+        <motion.span
           key={index}
           className={`scramble-letter ${letterClass} ${
             char === " " ? "scramble-space" : ""
@@ -90,17 +151,28 @@ export default function ScrambleTextReact({
             width: "1ch",
             marginRight: monospace ? "0.5ch" : "0",
           }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.1 }}
         >
           {char}
-        </span>
+        </motion.span>
       ));
     }
-    return text;
+    return (
+      <motion.span
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.1 }}
+      >
+        {text}
+      </motion.span>
+    );
   };
 
   return (
     <div ref={elementRef} className={className} data-scramble-text>
-      {renderText()}
+      <AnimatePresence>{renderText()}</AnimatePresence>
     </div>
   );
 }

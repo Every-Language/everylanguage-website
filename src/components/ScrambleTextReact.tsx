@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { useIntersectionObserver } from "@uidotdev/usehooks";
 
 interface ScrambleTextReactProps {
@@ -14,7 +14,7 @@ interface ScrambleTextReactProps {
 }
 
 const CYCLES_PER_LETTER = 2;
-const SHUFFLE_TIME = 50;
+const SHUFFLE_TIME = 80;
 
 export const randomChars =
   // latin
@@ -32,10 +32,6 @@ const ScrambleTextReact: React.FC<ScrambleTextReactProps> = ({
   text: TARGET_TEXT,
   className,
   letterClass,
-  steps,
-  interval,
-  letterInterval,
-  initialText,
   monospace,
 }) => {
   const [refCallback, entry] = useIntersectionObserver({
@@ -101,7 +97,32 @@ const ScrambleTextReact: React.FC<ScrambleTextReactProps> = ({
     }
   }, [isVisible]);
 
-  return <motion.span ref={elementRef}>{text}</motion.span>;
+  const renderText = () => {
+    if (monospace) {
+      return text.split("").map((char, index) => (
+        <span
+          key={index}
+          className={`scramble-letter ${letterClass} ${
+            char === " " ? "scramble-space" : ""
+          }`}
+          style={{
+            display: "inline-block",
+            width: "1ch",
+            marginRight: monospace ? "0.5ch" : "0",
+          }}
+        >
+          {char}
+        </span>
+      ));
+    }
+    return text;
+  };
+
+  return (
+    <motion.span ref={elementRef} className={className} data-scramble-text>
+      {renderText()}
+    </motion.span>
+  );
 };
 
 export default ScrambleTextReact;

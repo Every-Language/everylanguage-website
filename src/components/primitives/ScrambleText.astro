@@ -12,6 +12,7 @@ interface Props {
 }
 
 const props = Astro.props;
+
 const {
   text,
   class: className = "",
@@ -22,7 +23,6 @@ const {
   initialText = "",
 } = props;
 
-const chars = text.split("");
 ---
 
 <ScrambleTextReact
@@ -36,84 +36,3 @@ const chars = text.split("");
   initialText={initialText}
   monospace={true}
 />
-
-<script>
-  import { scrambleText } from "@/utils/textScramble";
-
-  function init() {
-    const elements = document.querySelectorAll(".scramble-text");
-
-    elements.forEach((element) => {
-      const targetText = element.getAttribute("data-text") || "";
-      const steps = parseInt(element.getAttribute("data-steps") || "5");
-      const interval = parseInt(element.getAttribute("data-interval") || "150");
-      const letterInterval = parseInt(
-        element.getAttribute("data-letter-interval") || "50"
-      );
-      const initialText = element.getAttribute("data-initial-text") || "";
-
-      let currentAnimation: { stop: () => void } | null = null;
-      let isScrambled = false;
-
-      // Function to start scrambling
-      const startScramble = () => {
-        if (!isScrambled) {
-          currentAnimation = scrambleText(element, targetText, {
-            steps,
-            interval,
-            letterInterval,
-            initialText,
-          });
-          isScrambled = true;
-        }
-      };
-
-      // Function to stop scrambling
-      const stopScramble = () => {
-        if (currentAnimation) {
-          currentAnimation.stop();
-          currentAnimation = null;
-          isScrambled = false;
-        }
-      };
-
-      // Create a more precise intersection observer
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            // Calculate how much of the element is visible
-            const visibilityRatio = entry.intersectionRatio;
-
-            if (visibilityRatio > 0.5) {
-              // Element is more than 50% visible
-              stopScramble();
-            } else if (visibilityRatio < 0.1) {
-              // Element is less than 10% visible
-              startScramble();
-            }
-          });
-        },
-        {
-          threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], // More granular thresholds
-          rootMargin: "0px", // No margin for more precise tracking
-        }
-      );
-
-      // Start observing the element
-      observer.observe(element);
-
-      // Store cleanup functions
-      (element as any).stopAnimation = () => {
-        stopScramble();
-        observer.disconnect();
-      };
-    });
-  }
-
-  // Initialize on DOM content loaded
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
-  }
-</script>

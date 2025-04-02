@@ -6,15 +6,10 @@ interface ScrambleTextReactProps {
   text: string;
   className?: string;
   letterClass?: string;
-  steps?: number;
-  interval?: number;
-  letterInterval?: number;
-  initialText?: string;
+  shuffleTime?: number;
+  cyclesPerLetter?: number;
   monospace?: boolean;
 }
-
-const CYCLES_PER_LETTER = 2;
-const SHUFFLE_TIME = 80;
 
 export const randomChars =
   // latin
@@ -32,6 +27,8 @@ const ScrambleTextReact: React.FC<ScrambleTextReactProps> = ({
   text: TARGET_TEXT,
   className,
   letterClass,
+  shuffleTime = 80,
+  cyclesPerLetter = 2,
   monospace,
 }) => {
   const [refCallback, entry] = useIntersectionObserver({
@@ -61,7 +58,7 @@ const ScrambleTextReact: React.FC<ScrambleTextReactProps> = ({
     intervalRef.current = setInterval(() => {
       const scrambled = TARGET_TEXT.split("")
         .map((char, index) => {
-          if (pos / CYCLES_PER_LETTER > index) {
+          if (pos / cyclesPerLetter > index) {
             return char;
           }
 
@@ -77,10 +74,10 @@ const ScrambleTextReact: React.FC<ScrambleTextReactProps> = ({
       setText(scrambled);
       pos++;
 
-      if (pos >= TARGET_TEXT.length * CYCLES_PER_LETTER) {
+      if (pos >= TARGET_TEXT.length * cyclesPerLetter) {
         stopScramble();
       }
-    }, SHUFFLE_TIME);
+    }, shuffleTime);
   };
 
   const stopScramble = () => {

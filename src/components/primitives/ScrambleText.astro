@@ -5,10 +5,8 @@ interface Props {
   text: string;
   class?: string;
   letterClass?: string;
-  steps?: number;
-  interval?: number;
-  letterInterval?: number;
-  initialText?: string;
+  shuffleTime?: number;
+  cyclesPerLetter?: number;
 }
 
 const props = Astro.props;
@@ -17,12 +15,9 @@ const {
   text,
   class: className = "",
   letterClass = "",
-  steps = 3,
-  interval = 30,
-  letterInterval = 10,
-  initialText = "",
+  shuffleTime = 80,
+  cyclesPerLetter = 2,
 } = props;
-
 ---
 
 <ScrambleTextReact
@@ -30,9 +25,7 @@ const {
   text={text}
   className={className}
   letterClass={letterClass}
-  steps={steps}
-  interval={interval}
-  letterInterval={letterInterval}
-  initialText={initialText}
   monospace={true}
+  shuffleTime={shuffleTime}
+  cyclesPerLetter={cyclesPerLetter}
 />

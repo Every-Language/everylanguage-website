@@ -1,46 +1,49 @@
-import { motion } from "motion/react";
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
-export default function AnimatedLogoReact() {
+const straightLine = `
+  M 0 50
+  Q 25 50, 50 50
+  Q 75 50, 100 50
+  Q 125 50, 150 50
+  Q 175 50, 200 50
+  Q 225 50, 250 50
+  Q 275 50, 300 50
+`;
+
+const waveformPath = `
+  M 0 50
+  Q 25 20, 50 50
+  Q 75 80, 100 50
+  Q 125 20, 150 50
+  Q 175 80, 200 50
+  Q 225 20, 250 50
+  Q 275 80, 300 50
+`;
+
+export default function WaveformAnimation() {
+  const [animate, setAnimate] = useState(false);
+
+  useEffect(() => {
+    // Animate once on mount
+    setAnimate(true);
+  }, []);
+
   return (
-    <motion.img
-      animate={{
-        // scale: [1, 2, 2, 1, 1.5],
-        // scaleY: [1, 0, 0, 1, 1], // Squish vertically to half its height and back
-        // rotate: [0, 0, 180, 180, 0],
-        opacity: [0, 0.25, 0.5, 0.75, 1],
-        borderRadius: ["50%", "50%", "50%", "50%", "50%"],
-
-        backgroundColor: [
-          //   "#d89e0f",
-          "#c9322a",
-          //   "#771311",
-          //   "#490d0b",
-          "#000000",
-        ],
-      }}
-      transition={{
-        duration: 1,
-        ease: "easeInOut",
-        times: [0, 0.2, 0.5, 0.8, 1],
-        repeat: 0,
-        repeatDelay: 1,
-      }}
-      style={circle}
-      src="/logos/logo.svg"
-      alt="Every Language Logo"
-      width={200}
-      height={200}
-    />
+    <div className="p-4 flex flex-col items-center">
+      <svg width="300" height="100" viewBox="0 0 300 100">
+        <motion.path
+          initial={{ d: straightLine }}
+          animate={{ d: animate ? waveformPath : straightLine }}
+          fill="transparent"
+          stroke="black"
+          strokeWidth="2"
+          transition={{
+            duration: 1.2,
+            ease: "easeInOut",
+          }}
+        />
+      </svg>
+    </div>
   );
 }
-
-/**
- * ==============   Styles   ================
- */
-
-const circle = {
-  width: 150,
-  height: 150,
-  backgroundColor: "#000000",
-  borderRadius: "50%",
-};

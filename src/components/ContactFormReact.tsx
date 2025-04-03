@@ -67,10 +67,16 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-6">
-      <h1 className="text-3xl font-bold text-center mb-12">Get Involved</h1>
+    <div className="w-full max-w-7xl mx-auto">
+      <Separator
+        className="my-12"
+        style={{ backgroundColor: "#d89e0f", height: "1px", opacity: 0.3 }}
+      />
+      <h1 className="text-[2.13rem] leading-9 font-semibold lg:max-w-[64%]font-bold  mb-12">
+        Get Involved
+      </h1>
 
-      <div className="grid md:grid-cols-2 gap-12">
+      <div className="text-sm font-medium auto-cols-fr grid-cols-1 md:grid-cols-2 grid-rows-[auto_auto] grid gap-[3.13rem]">
         {/* Donation Section */}
         <div className="space-y-6">
           <h2
@@ -169,13 +175,6 @@ export default function ContactForm() {
         className="my-12"
         style={{ backgroundColor: "#d89e0f", height: "1px", opacity: 0.3 }}
       />
-
-      <div className="text-center max-w-2xl mx-auto">
-        <p className="text-sm text-gray-600">
-          The Every Language Gospel Translation Project is dedicated to making
-          God's word accessible to all people in their native languages.
-        </p>
-      </div>
     </div>
   );
 }

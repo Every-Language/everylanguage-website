@@ -1,10 +1,11 @@
+"use client";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Zap } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
-import { ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,24 +18,36 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { toast } from "sonner";
+
+const subscribeSchema = z.object({
+  email: z
+    .string()
+    .email({ message: "Please enter a valid email address." })
+    .min(1),
+  name: z.string().optional(),
+});
+
+type FormValues = z.infer<typeof subscribeSchema>;
 
 export default function ContactForm() {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const form = useForm<FormValues>({
+    resolver: zodResolver(subscribeSchema),
+    defaultValues: {
+      email: "",
+      name: "",
+    },
+  });
 
-  const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
+  const onSubmit = async (data: FormValues) => {
     try {
+      setIsSubmitting(true);
       const response = await fetch("/api/subscribe", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, name }),
+        body: JSON.stringify(data),
       });
 
       const result = await response.json();
@@ -44,8 +57,7 @@ export default function ContactForm() {
       }
 
       toast.success("Thank you for subscribing to our newsletter!");
-      setEmail("");
-      setName("");
+      form.reset();
     } catch (error) {
       console.error("Subscription error:", error);
       toast.error("Failed to subscribe. Please try again later.");
@@ -55,95 +67,111 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <h1 className="text-3xl font-bold text-center mb-8">Contact Us</h1>
+    <div className="w-full max-w-7xl mx-auto p-6">
+      <h1 className="text-3xl font-bold text-center mb-12">Get Involved</h1>
 
-      <div className="grid gap-8 md:grid-cols-2">
+      <div className="grid md:grid-cols-2 gap-12">
         {/* Donation Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Support Our Mission</CardTitle>
-            <CardDescription>
-              Help us translate the Bible into every language in audio and text
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-sm">
-              Your generous donation helps us bring God's word to people in
-              their native language, making the Gospel accessible to everyone
-              around the world.
-            </p>
-            <div className="flex justify-center">
-              <img
-                src="/placeholder.svg?height=120&width=200"
-                alt="Translation project illustration"
-                className="rounded-md"
-              />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button className="w-full" asChild>
-              <a
-                href="https://wegive.com/holos"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2"
-              >
-                Donate Now <ExternalLink className="h-4 w-4" />
-              </a>
-            </Button>
-          </CardFooter>
-        </Card>
+        <div className="space-y-6">
+          <h2
+            className="text-2xl font-medium border-l-4 pl-4"
+            style={{ borderColor: "#d89e0f" }}
+          >
+            Support Our Mission
+          </h2>
+
+          <p className="text-gray-700">
+            Help us translate the Bible into every language in audio and text.
+            Your donation makes the Gospel accessible to everyone in their
+            native language.
+          </p>
+
+          <div className="aspect-video bg-gray-50 border border-gray-100 flex items-center justify-center rounded-lg overflow-hidden">
+            <img
+              src="/src/assets/pages/homepage/team.JPG"
+              alt="Translation project"
+              className="max-h-full rounded-lg"
+            />
+          </div>
+
+          <Button
+            className="w-full py-6 text-black hover:text-white"
+            style={{ backgroundColor: "#d89e0f", borderColor: "#d89e0f" }}
+            asChild
+          >
+            <a
+              href="https://wegive.com/holos"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-2"
+            >
+              Donate Now <ExternalLink className="h-4 w-4" />
+            </a>
+          </Button>
+        </div>
 
         {/* Newsletter Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Stay Updated</CardTitle>
-            <CardDescription>
-              Subscribe to our newsletter for project updates
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubscribe} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email Address</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="your@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="name">Name (Optional)</Label>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Your Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </div>
-            </form>
-          </CardContent>
-          <CardFooter>
+        <div className="space-y-6">
+          <h2
+            className="text-2xl font-medium border-l-4 pl-4"
+            style={{ borderColor: "#d89e0f" }}
+          >
+            Stay Connected
+          </h2>
+
+          <p className="text-gray-700">
+            Subscribe to our newsletter to receive updates on our translation
+            projects and ways you can get involved in our mission.
+          </p>
+
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-sm font-medium">
+                Name
+              </Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="Your Name"
+                {...form.register("name")}
+                className="border-gray-300 focus:border-[#d89e0f] focus:ring-[#d89e0f]"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-sm font-medium">
+                Email Address *
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="your@email.com"
+                {...form.register("email")}
+                required
+                className="border-gray-300 focus:border-[#d89e0f] focus:ring-[#d89e0f]"
+              />
+            </div>
+
             <Button
               type="submit"
-              className="w-full"
-              onClick={handleSubscribe}
-              disabled={isSubmitting || !email}
+              className="w-full py-6 text-black hover:text-white"
+              style={{ backgroundColor: "#d89e0f", borderColor: "#d89e0f" }}
+              onClick={form.handleSubmit(onSubmit)}
+              disabled={isSubmitting || !form.watch("email")}
             >
               {isSubmitting ? "Subscribing..." : "Subscribe"}
             </Button>
-          </CardFooter>
-        </Card>
+          </form>
+        </div>
       </div>
 
-      <div className="mt-8 text-center">
-        <Separator className="my-4" />
-        <p className="text-sm text-muted-foreground">
+      <Separator
+        className="my-12"
+        style={{ backgroundColor: "#d89e0f", height: "1px", opacity: 0.3 }}
+      />
+
+      <div className="text-center max-w-2xl mx-auto">
+        <p className="text-sm text-gray-600">
           The Every Language Gospel Translation Project is dedicated to making
           God's word accessible to all people in their native languages.
         </p>

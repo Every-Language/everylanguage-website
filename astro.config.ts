@@ -10,16 +10,16 @@ import icon from "astro-icon";
 import robotsTxt from "astro-robots-txt";
 import { defineConfig } from "astro/config";
 import { defaultLocale, locales, siteTitle, siteUrl } from "./site.config";
-
+import vercelServerless from "@astrojs/vercel/serverless";
 // https://astro.build/config
 export default defineConfig({
   site: siteUrl,
   output: "hybrid",
-  adapter: cloudflare({
-    imageService: "compile",
-    experimental: {
-      manualChunks: ["sharp"],
+  adapter: vercelServerless({
+    webAnalytics: {
+      enabled: true,
     },
+    maxDuration: 8,
   }),
   compressHTML: true,
   i18n: {

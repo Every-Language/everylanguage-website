@@ -282,7 +282,6 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
             toggleActions: "play none none reverse",
           },
         })
-        .to("[data-company-name]", { opacity: 0 })
         .to(".mask-rect", { width: "100%" }, "<")
         .set("#header-logo", { pointerEvents: "none" });
 

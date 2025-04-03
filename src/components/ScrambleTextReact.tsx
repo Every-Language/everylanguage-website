@@ -97,7 +97,7 @@ const ScrambleTextReact: React.FC<ScrambleTextReactProps> = ({
   const renderText = () => {
     if (monospace) {
       return text.split("").map((char, index) => (
-        <span
+        <motion.span
           key={index}
           className={`scramble-letter ${letterClass} ${
             char === " " ? "scramble-space" : ""
@@ -109,7 +109,7 @@ const ScrambleTextReact: React.FC<ScrambleTextReactProps> = ({
           }}
         >
           {char}
-        </span>
+        </motion.span>
       ));
     }
     return text;

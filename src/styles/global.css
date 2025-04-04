@@ -19,6 +19,10 @@ html {
 	@apply overflow-x-hidden;
 }
 
+/* Debug styles */
+body {
+	min-height: 100vh;
+}
 
 /* Selection */
 ::-moz-selection {

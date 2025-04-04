@@ -24,7 +24,17 @@ const { seo } = Astro.props;
 	<Head seo={seo}>
 		<ViewTransitions />
 	</Head>
-	<body>
+	<body class="relative">
+		<div class="fixed inset-0 -z-10">
+		<img
+			src="/bg.png"
+			alt="Background"
+			class="w-full h-full object-cover"
+			loading="eager"
+			decoding="async"
+		/>
+		<div class="absolute inset-0 bg-white/40"></div>
+		</div>
 		<LoadingIndicator />
 		<LinesWrapper />
 		<Navigation showTopBar />

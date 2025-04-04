@@ -1,0 +1,33 @@
+---
+interface Props {
+  class?: string;
+  background?: "solid" | "gradient" | "none";
+  color?: string;
+  gradientFrom?: string;
+  gradientTo?: string;
+}
+
+const {
+  class: className,
+  background = "none",
+  color = "white",
+  gradientFrom = "from-blue-500",
+  gradientTo = "to-purple-500",
+} = Astro.props;
+---
+
+<section
+  class:list={[
+    "max-w-[90vw]",
+    "mx-auto",
+    "relative py-20",
+    background === "solid" && `bg-${color}`,
+    background === "gradient" &&
+      `bg-gradient-to-r ${gradientFrom} ${gradientTo}`,
+    className,
+  ]}
+>
+  <div class="relative z-10">
+    <slot />
+  </div>
+</section>

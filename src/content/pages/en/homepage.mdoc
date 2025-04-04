@@ -10,13 +10,31 @@ seo:
   author: Every Language
 ---
 
+{% ScrollFade %}
 {% Hero
    title="We believe <b>every person</b> needs the <b>Gospel</b> in their mother tongue."
    subtitle="We mobilize mother tongue speakers to translate the full Bible into every language. <span class=\"text-[#d89e0f]\">Join us in this movement.</span>"
    buttons=[{title: "Partner with us", href: "/contact", style: "button", icon: "iconamoon:arrow-top-right-1-thin"}] /%}
+{% /ScrollFade %}
 
-{% Container %}
+{% Section background="gradient" gradientFrom="from-blue-600" gradientTo="to-indigo-600" %}
+{% ScrollFade delay=0.2 %}
+{% Services
+   title="We fulfill the Great Commission through <span class=\"text-[#d89e0f]\">movements of mother tongue Bible translation.</span>"
+   services=[{title: "Oral Mother Tongue Translation", description: "We translate the Bible via OMT, enabling mother tongue speakers to complete a full Bible in just 18 months at a fraction of traditional costs.", icon: "/src/assets/pages/homepage/talking-svgrepo-com.svg"}, {title: "Technology as Leverage", description: "We develop innovative technology to accelerate Bible translation, making it more accessible, efficient, and scalable for every language group.", icon: "/src/assets/pages/homepage/technology-svgrepo-com.svg"}, {title: "Discipleship Movements", description: "We equip mother tongue speakers for Discipleship Making Movements, connecting the Church to fund Bibleless languages and mobilizing global prayer.", icon: "/src/assets/pages/homepage/team-svgrepo-com.svg"}] /%}
+{% /ScrollFade %}
+{% /Section %}
 
+{% Section background="solid" color="gray-100" %}
+{% ScrollFade delay=0.4 %}
+{% RecentWork
+   title="Translation Projects"
+   buttons=[{title: "View all projects", href: "/works", style: "button", icon: "iconamoon:arrow-top-right-1-thin"}] /%}
+{% /ScrollFade %}
+{% /Section %}
+
+{% Section background="gradient" gradientFrom="from-indigo-600" gradientTo="to-purple-600" %}
+{% ScrollFade delay=0.6 %}
 {% ContactForm
    title="Get Involved"
    subtitle="Join us in making the Bible accessible to everyone"
@@ -29,14 +47,5 @@ seo:
    newsletterTitle="Stay Connected"
    newsletterDescription="Subscribe to our newsletter to receive updates on our translation projects and ways you can get involved in our mission."
 /%}
-
-{% Services
-   title="We fulfill the Great Commission through <span class=\"text-[#d89e0f]\">movements of mother tongue Bible translation.</span>"
-   services=[{title: "Oral Mother Tongue Translation", description: "We translate the Bible via OMT, enabling mother tongue speakers to complete a full Bible in just 18 months at a fraction of traditional costs.", icon: "/src/assets/pages/homepage/talking-svgrepo-com.svg"}, {title: "Technology as Leverage", description: "We develop innovative technology to accelerate Bible translation, making it more accessible, efficient, and scalable for every language group.", icon: "/src/assets/pages/homepage/technology-svgrepo-com.svg"}, {title: "Discipleship Movements", description: "We equip mother tongue speakers for Discipleship Making Movements, connecting the Church to fund Bibleless languages and mobilizing global prayer.", icon: "/src/assets/pages/homepage/team-svgrepo-com.svg"}] /%}
-
-{% RecentWork
-   title="Translation Projects"
-   buttons=[{title: "View all projects", href: "/works", style: "button", icon: "iconamoon:arrow-top-right-1-thin"}] /%}
-
-
-{% /Container %}
+{% /ScrollFade %}
+{% /Section %}

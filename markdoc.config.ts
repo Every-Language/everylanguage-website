@@ -178,5 +178,24 @@ export default defineMarkdocConfig({
       },
       render: component("./src/components/sections/Contact.astro"),
     },
+    ScrollFade: {
+      attributes: {
+        class: { type: String, render: "class" },
+        delay: { type: Number, render: "delay" },
+      },
+      children: ["*"],
+      render: component("./src/components/primitives/ScrollFade.astro"),
+    },
+    Section: {
+      attributes: {
+        class: { type: String, render: "class" },
+        background: { type: String, render: "background" },
+        color: { type: String, render: "color" },
+        gradientFrom: { type: String, render: "gradientFrom" },
+        gradientTo: { type: String, render: "gradientTo" },
+      },
+      children: ["*"],
+      render: component("./src/components/primitives/Section.astro"),
+    },
   },
 });

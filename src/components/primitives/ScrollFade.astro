@@ -1,0 +1,42 @@
+---
+interface Props {
+  class?: string;
+  delay?: number;
+}
+
+const { class: className, delay = 0 } = Astro.props;
+---
+
+<div class:list={["opacity-0", className]} data-scroll-fade data-delay={delay}>
+  <slot />
+</div>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.addEventListener("astro:page-load", () => {
+    const elements =
+      document.querySelectorAll<HTMLElement>("[data-scroll-fade]");
+    elements.forEach((element) => {
+      const delay = parseFloat(element.dataset.delay || "0");
+      gsap.fromTo(
+        element,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          delay,
+          scrollTrigger: {
+            trigger: element,
+            start: "top 80%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+    });
+  });
+</script>

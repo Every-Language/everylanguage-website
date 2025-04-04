@@ -15,11 +15,11 @@ import vercelServerless from "@astrojs/vercel/serverless";
 export default defineConfig({
   site: siteUrl,
   output: "hybrid",
-  adapter: vercelServerless({
-    webAnalytics: {
-      enabled: true,
+  adapter: cloudflare({
+    imageService: "compile",
+    experimental: {
+      manualChunks: ["sharp"],
     },
-    maxDuration: 8,
   }),
   compressHTML: true,
   i18n: {

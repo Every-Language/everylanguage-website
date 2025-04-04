@@ -88,6 +88,50 @@ export default defineMarkdocConfig({
       render: component("./src/components/sections/Services.astro"),
     },
     ContactForm: {
+      attributes: {
+        title: { type: String, render: "title", required: true },
+        subtitle: { type: String, render: "subtitle", required: true },
+        donationTitle: {
+          type: String,
+          render: "donationTitle",
+          required: true,
+        },
+        donationDescription: {
+          type: String,
+          render: "donationDescription",
+          required: true,
+        },
+        donationImage: {
+          type: String,
+          render: "donationImage",
+          required: true,
+        },
+        donationImageAlt: {
+          type: String,
+          render: "donationImageAlt",
+          required: true,
+        },
+        donationButtonText: {
+          type: String,
+          render: "donationButtonText",
+          required: true,
+        },
+        donationButtonUrl: {
+          type: String,
+          render: "donationButtonUrl",
+          required: true,
+        },
+        newsletterTitle: {
+          type: String,
+          render: "newsletterTitle",
+          required: true,
+        },
+        newsletterDescription: {
+          type: String,
+          render: "newsletterDescription",
+          required: true,
+        },
+      },
       render: component("./src/components/sections/ContactForm.astro"),
     },
     RecentWork: {

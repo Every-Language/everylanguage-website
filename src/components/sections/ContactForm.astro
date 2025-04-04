@@ -1,8 +1,20 @@
 ---
 import ContactFormReact from "@/components/ContactFormReact.tsx";
-interface Props {}
 
-const {} = Astro.props;
+interface Props {
+  title: string;
+  subtitle: string;
+  donationTitle: string;
+  donationDescription: string;
+  donationImage: string;
+  donationImageAlt: string;
+  donationButtonText: string;
+  donationButtonUrl: string;
+  newsletterTitle: string;
+  newsletterDescription: string;
+}
+
+const props = Astro.props;
 ---
 
-<ContactFormReact client:load />
+<ContactFormReact {...props} client:load />

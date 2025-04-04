@@ -18,6 +18,19 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { Image } from "astro:assets";
+interface ContactFormProps {
+  title: string;
+  subtitle: string;
+  donationTitle: string;
+  donationDescription: string;
+  donationImage: string;
+  donationImageAlt: string;
+  donationButtonText: string;
+  donationButtonUrl: string;
+  newsletterTitle: string;
+  newsletterDescription: string;
+}
 
 const subscribeSchema = z.object({
   email: z
@@ -29,7 +42,18 @@ const subscribeSchema = z.object({
 
 type FormValues = z.infer<typeof subscribeSchema>;
 
-export default function ContactForm() {
+export default function ContactForm({
+  title,
+  subtitle,
+  donationTitle,
+  donationDescription,
+  donationImage,
+  donationImageAlt,
+  donationButtonText,
+  donationButtonUrl,
+  newsletterTitle,
+  newsletterDescription,
+}: ContactFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useForm<FormValues>({
     resolver: zodResolver(subscribeSchema),
@@ -73,7 +97,7 @@ export default function ContactForm() {
         style={{ backgroundColor: "#d89e0f", height: "1px", opacity: 0.3 }}
       />
       <h1 className="text-[2.13rem] leading-9 font-semibold lg:max-w-[64%]font-bold  mb-12">
-        Get Involved
+        {title}
       </h1>
 
       <div className="text-sm font-medium auto-cols-fr grid-cols-1 md:grid-cols-2 grid-rows-[auto_auto] grid gap-[3.13rem]">
@@ -83,19 +107,15 @@ export default function ContactForm() {
             className="text-2xl font-medium border-l-4 pl-4"
             style={{ borderColor: "#d89e0f" }}
           >
-            Support Our Mission
+            {donationTitle}
           </h2>
 
-          <p className="text-gray-700">
-            Help us translate the Bible into every language in audio and text.
-            Your donation makes the Gospel accessible to everyone in their
-            native language.
-          </p>
+          <p className="text-gray-700">{donationDescription}</p>
 
           <div className="aspect-video bg-gray-50 border border-gray-100 flex items-center justify-center rounded-lg overflow-hidden">
             <img
-              src="/src/assets/pages/homepage/team.JPG"
-              alt="Translation project"
+              src={donationImage}
+              alt={donationImageAlt}
               className="max-h-full rounded-lg"
             />
           </div>
@@ -106,12 +126,12 @@ export default function ContactForm() {
             asChild
           >
             <a
-              href="https://wegive.com/holos"
+              href={donationButtonUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2"
             >
-              Donate Now <ExternalLink className="h-4 w-4" />
+              {donationButtonText} <ExternalLink className="h-4 w-4" />
             </a>
           </Button>
         </div>
@@ -122,13 +142,10 @@ export default function ContactForm() {
             className="text-2xl font-medium border-l-4 pl-4"
             style={{ borderColor: "#d89e0f" }}
           >
-            Stay Connected
+            {newsletterTitle}
           </h2>
 
-          <p className="text-gray-700">
-            Subscribe to our newsletter to receive updates on our translation
-            projects and ways you can get involved in our mission.
-          </p>
+          <p className="text-gray-700">{newsletterDescription}</p>
 
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             <div className="space-y-2">

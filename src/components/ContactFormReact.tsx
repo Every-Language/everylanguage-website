@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Image } from "astro:assets";
+
 interface ContactFormProps {
   title: string;
   subtitle: string;

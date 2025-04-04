@@ -1,6 +1,5 @@
 ---
 import ContactFormReact from "@/components/ContactFormReact.tsx";
-import { getImage } from "astro:assets";
 
 interface Props {
   title: string;
@@ -16,14 +15,6 @@ interface Props {
 }
 
 const props = Astro.props;
-
-// Get the optimized image URL
-const image = await getImage({
-  src: props.donationImage,
-  width: 800,
-  height: 450,
-  format: "webp",
-});
 ---
 
-<ContactFormReact {...props} donationImage={image.src} client:load />
+<ContactFormReact {...props} client:load />

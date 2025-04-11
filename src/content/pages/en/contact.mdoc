@@ -4,23 +4,24 @@ type: informational
 lastUpdateDate: 2024-03-09
 hideTitle: false
 seo:
-  title: "Contact Us: Get in Touch for Innovative Web Solutions"
-  description: "Reach out to [Company] Studio for expert web design and SEO services. Connect with us to discuss your project and explore cutting-edge web solutions."
-  author: Your company
+  title: "Contact Every Language: Join the Movement to Translate the Bible into Every Language"
+  description: "Connect with Every Language to learn how you can help bring the full Bible to Bibleless language groups. Partner with us in our mission to catalyze discipleship movements through mother tongue Bible translation."
+  author: Every Language
 ---
 
 {% Container %}
 
-{% Contact
-  title="Get in touch"
-  fields=[
-    {title: "Full Name", placeholder: "John Doe", required: true, type: "text"},
-    {title: "Email", placeholder: "contact@email.com", required: true, type: "email"},
-    {title: "Phone", placeholder: "+1 345-678", type: "tel"},
-    {title: "Schedule to receive call", placeholder: "10:00 AM to 4:00 PM", type: "text"},
-    {title: "Message", placeholder: "Type your message here", type: "textarea", width: 2},
-    {title: "Contact us", type: "submit", width: 2}
-  ]
-/%}
+{% ContactForm
+	title="Get Involved"
+	subtitle="Join us in making the Bible accessible to everyone"
+	donationTitle="Support Our Mission"
+	donationDescription="Help us translate the Bible into every language in audio and text. Your donation makes the Gospel accessible to everyone in their native language."
+	donationImage="/team.webp"
+	donationImageAlt="Translation project"
+	donationButtonText="Donate Now"
+	donationButtonUrl="https://wegive.com/holos"
+	newsletterTitle="Stay Connected"
+	newsletterDescription="Subscribe to our newsletter to receive updates on our translation projects and ways you can get involved in our mission."
+ /%}
 
 {% /Container %}

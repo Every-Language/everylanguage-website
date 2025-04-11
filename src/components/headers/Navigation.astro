@@ -223,7 +223,8 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
             </a>
           ))
         }
-        <div class="flex gap-8 pt-10 pl-16 md:pl-0">
+        <!-- NOTE: language switching is disabled in both places that this note is found -->
+        <!-- <div class="flex gap-8 pt-10 pl-16 md:pl-0">
           {
             locales.map((locale) => (
               <a
@@ -242,7 +243,7 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
               </a>
             ))
           }
-        </div>
+        </div> -->
       </div>
     </div>
   </nav>

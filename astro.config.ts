@@ -1,5 +1,4 @@
 import alpinejs from "@astrojs/alpinejs";
-import cloudflare from "@astrojs/cloudflare";
 import markdoc from "@astrojs/markdoc";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
@@ -10,16 +9,13 @@ import icon from "astro-icon";
 import robotsTxt from "astro-robots-txt";
 import { defineConfig } from "astro/config";
 import { defaultLocale, locales, siteTitle, siteUrl } from "./site.config";
-import vercelServerless from "@astrojs/vercel/serverless";
+import vercel from "@astrojs/vercel";
 // https://astro.build/config
 export default defineConfig({
   site: siteUrl,
   output: "hybrid",
-  adapter: cloudflare({
-    imageService: "compile",
-    experimental: {
-      manualChunks: ["sharp"],
-    },
+  adapter: vercel({
+    webAnalytics: { enabled: true },
   }),
   compressHTML: true,
   i18n: {
@@ -37,10 +33,10 @@ export default defineConfig({
       __DATE__: `'${new Date().toISOString()}'`,
     },
     optimizeDeps: {
-      include: ["@uidotdev/usehooks", "motion", "motion/react"],
+      include: ["@uidotdev/usehooks", "motion", "motion/react", "animejs"],
     },
     ssr: {
-      noExternal: ["@uidotdev/usehooks", "motion"],
+      noExternal: ["@uidotdev/usehooks", "motion", "animejs"],
     },
   },
   integrations: [

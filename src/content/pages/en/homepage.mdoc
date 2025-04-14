@@ -11,6 +11,7 @@ seo:
 ---
 
 {% ScrollFade %}
+
 {% Hero
    title="We believe <b>every person</b> needs the <b>Gospel</b> in their mother tongue."
    subtitle="We mobilize mother tongue speakers to translate the full Bible into every language. <span class=\"text-[#d89e0f]\">Join us in this movement.</span>"
@@ -25,8 +26,16 @@ seo:
 {% /ScrollFade %}
 {% /Section %}
 
+{% Section background="solid" color="gray-100" %}
+{% ScrollFade delay=0.4 %}
+{% RecentWork
+   title="Translation Projects"
+   buttons=[{title: "View all projects", href: "/works", style: "button", icon: "iconamoon:arrow-top-right-1-thin"}] /%}
+{% /ScrollFade %}
+{% /Section %}
+
 {% Section background="gradient" gradientFrom="from-indigo-600" gradientTo="to-purple-600" %}
-{% ScrollFade delay=0.6 %}
+{% ScrollFade delay=0.2 %}
 {% ContactForm
    title="Get Involved"
    subtitle="Join us in making the Bible accessible to everyone"

@@ -6,7 +6,6 @@ import {
   fields,
   singleton,
 } from "@keystatic/core";
-
 import { block, wrapper } from "@keystatic/core/content-components";
 import IconList from "./.keystatic/icon-list.json";
 import {

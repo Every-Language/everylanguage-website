@@ -23,6 +23,7 @@
         "@tanstack/react-query": "^5.71.5",
         "@uidotdev/usehooks": "^2.4.1",
         "alpinejs": "^3.14.0",
+        "animejs": "^4.0.0",
         "astro": "4.7.0",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
@@ -978,6 +979,8 @@
     "ajv": ["ajv@6.12.6", "", { "dependencies": { "fast-deep-equal": "^3.1.1", "fast-json-stable-stringify": "^2.0.0", "json-schema-traverse": "^0.4.1", "uri-js": "^4.2.2" } }, "sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g=="],
 
     "alpinejs": ["alpinejs@3.14.8", "", { "dependencies": { "@vue/reactivity": "~3.1.1" } }, "sha512-wT2fuP2DXpGk/jKaglwy7S/IJpm1FD+b7U6zUrhwErjoq5h27S4dxkJEXVvhbdwyPv9U+3OkUuNLkZT4h2Kfrg=="],
+
+    "animejs": ["animejs@4.0.0", "", {}, "sha512-JHFkhTvH+hYAljDNH7V0qLWDvF/vDvcFB5RoTKjjzLc7JKBSHwMFBobUmXvblwzWqpDqe500q4lnk9/sNRWTzw=="],
 
     "ansi-align": ["ansi-align@3.0.1", "", { "dependencies": { "string-width": "^4.1.0" } }, "sha512-IOfwwBF5iczOjp/WeY4YxyjqAFMQoZufdQWDd19SEExbVLNXqvpzSJ/M7Za4/sCPmQ0+GRquoA7bGcINcxew6w=="],
 

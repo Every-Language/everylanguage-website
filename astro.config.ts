@@ -33,10 +33,10 @@ export default defineConfig({
       __DATE__: `'${new Date().toISOString()}'`,
     },
     optimizeDeps: {
-      include: ["@uidotdev/usehooks", "motion", "motion/react", "animejs"],
+      include: ["@uidotdev/usehooks", "motion", "motion/react"],
     },
     ssr: {
-      noExternal: ["@uidotdev/usehooks", "motion", "animejs"],
+      noExternal: ["@uidotdev/usehooks", "motion"],
     },
   },
   integrations: [
